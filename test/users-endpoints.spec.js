@@ -1,29 +1,30 @@
 const knex = require("knex");
 const bcrypt = require("bcryptjs");
 const app = require("../src/app");
-const helpers = require("./test-helpers");
+const helpers = require("./helpers");
 
 describe("Users Endpoints", function () {
   let db;
 
   const { testUsers } = helpers.makeSequencerFixtures();
   const testUser = testUsers[0];
-
+  console.log(process.env.TEST_DB_URL);
   before("make knex instance", () => {
     db = knex({
       client: "pg",
-      connection: process.env.TEST_DATABASE_URL,
+      connection: process.env.TEST_DB_URL,
     });
     app.set("db", db);
   });
 
-  after("disconnect from db", () => db.destroy());
   before("cleanup", () => helpers.cleanTables(db));
   afterEach("cleanup", () => helpers.cleanTables(db));
+  after("disconnect from db", () => db.destroy());
 
   describe("POST /api/users", () => {
     context("User Validation", () => {
       beforeEach("insert users", () => helpers.seedUsers(db, testUsers));
+      afterEach("cleanup", () => helpers.cleanTables(db));
 
       const requiredFields = ["user_name", "email", "password"];
 
@@ -102,14 +103,14 @@ describe("Users Endpoints", function () {
       });
 
       it("responds 400 error when password isn't complex enough", () => {
-        const userPasswordNotComplex = {
+        const userPasswordDumb = {
           user_name: "test user_name",
           password: "11aaAAbb",
           email: "test@email.com",
         };
         return supertest(app)
           .post("/api/users")
-          .send(userPasswordNotComplex)
+          .send(userPasswordDumb)
           .expect(400, {
             error:
               "Password must contain 1 upper case, lower case, number, and special character",
@@ -163,7 +164,7 @@ describe("Users Endpoints", function () {
         };
 
         return supertest(app)
-          .post("api/users")
+          .post("/api/users")
           .send(newUser)
           .expect(201)
           .expect((res) => {
@@ -171,27 +172,16 @@ describe("Users Endpoints", function () {
             expect(res.body.user_name).to.eql(newUser.user_name);
             expect(res.body.email).to.eql(newUser.email);
             expect(res.body).to.not.have.property("password");
-            expect(res.headers.location).to.eql(`/api/users/${res.body.id}`);
-            const expectedDate = new Date().toLocaleString("en", {
-              timeZone: "UTC",
-            });
-            const actualDate = new Date(res.body.date_created).toLocaleString();
-            expect(actualDate).to.eql(expectedDate);
           })
           .expect((res) =>
             db
-              .from("sequencer_users")
+              .from("users")
               .select("*")
               .where({ id: res.body.id })
               .first()
               .then((row) => {
                 expect(row.user_name).to.eql(newUser.user_name);
                 expect(row.email).to.eql(newUser.email);
-                const expectedDate = new Date().toLocaleString("en", {
-                  timeZone: "UTC",
-                });
-                const actualDate = new Date(row.date_created).toLocaleString();
-                expect(actualDate).to.eql(expectedDate);
 
                 return bcrypt.compare(newUser.password, row.password);
               })

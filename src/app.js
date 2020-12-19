@@ -6,6 +6,8 @@ const helmet = require("helmet");
 const { NODE_ENV } = require("./config");
 
 const authRouter = require("./auth/auth-router");
+const usersRouter = require("./users/users-router");
+const patternsRouter = require("./patterns/patterns-router");
 
 const app = express();
 
@@ -16,6 +18,8 @@ app.use(helmet());
 app.use(cors());
 
 app.use("/api/auth", authRouter);
+app.use("/api/users", usersRouter);
+app.use("/api/patterns", patternsRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello, boilerplate; BRUV");

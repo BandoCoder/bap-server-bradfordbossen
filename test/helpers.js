@@ -32,9 +32,9 @@ function makePatternsArray() {
       pattern_data: {
         bpm: 130,
         notes: [
-          ["0:0:3", "C4"],
-          ["0:1:3", "D4"],
-          ["0:2:3", "E4"],
+          ["0:0:3", "A1"],
+          ["0:1:3", "B1"],
+          ["0:2:3", "C1"],
         ],
       },
       user_id: 1,
@@ -45,9 +45,9 @@ function makePatternsArray() {
       pattern_data: {
         bpm: 150,
         notes: [
-          ["0:0:3", "C4"],
-          ["0:1:3", "D4"],
-          ["0:2:3", "E4"],
+          ["0:0:3", "C1"],
+          ["0:1:3", "D1"],
+          ["0:2:3", "E1"],
         ],
       },
       user_id: 2,
@@ -58,9 +58,9 @@ function makePatternsArray() {
       pattern_data: {
         bpm: 140,
         notes: [
-          ["0:0:3", "C4"],
-          ["0:1:3", "D4"],
-          ["0:2:3", "E4"],
+          ["0:0:3", "A1"],
+          ["0:1:3", "B1"],
+          ["0:2:3", "C1"],
         ],
       },
       user_id: 2,
@@ -116,27 +116,27 @@ function seedUsers(db, users) {
     );
 }
 
-function seedPatterns(db, users, projects) {
+function seedPatterns(db, users, patterns) {
   return db.transaction(async (trx) => {
     await seedUsers(trx, users);
-    await trx.into("patterns").insert(projects);
+    await trx.into("patterns").insert(patterns);
 
     await trx.raw(`SELECT setval('patterns_id_seq', ?)`, [
-      projects[projects.length - 1].id,
+      patterns[patterns.length - 1].id,
     ]);
   });
 }
 
 function makeMaliciousPattern() {
-  const maliciousProject = {
+  const maliciousPattern = {
     id: 111,
     title: 'malicious pattern title <script>alert("xss");</script>',
     pattern_data: {
       bpm: 110,
       notes: [
-        ["0:0:3", "C4"],
-        ["0:1:3", "D4"],
-        ["0:2:3", "E4"],
+        ["0:0:3", "C1"],
+        ["0:1:3", "D1"],
+        ["0:2:3", "E1"],
       ],
     },
     user_id: 1,
@@ -144,7 +144,7 @@ function makeMaliciousPattern() {
 
   const expectedPattern = {
     ...maliciousPattern,
-    title: 'malicious Pattern title &lt;script&gt;alert("xss");&lt;/script&gt;',
+    title: 'malicious pattern title &lt;script&gt;alert("xss");&lt;/script&gt;',
   };
 
   return {
