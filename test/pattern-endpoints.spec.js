@@ -2,7 +2,7 @@ const knex = require("knex");
 const app = require("../src/app");
 const helpers = require("./helpers");
 
-describe.only("Pattern Endpoints", function () {
+describe("Pattern Endpoints", function () {
   let db;
   const { testPatterns, testUsers } = helpers.makeSequencerFixtures();
   const testPattern = testPatterns[0];
@@ -103,7 +103,7 @@ describe.only("Pattern Endpoints", function () {
     });
   });
 
-  describe("GET /api/patterns/users/:userid", () => {
+  describe("GET /api/patterns/users/:user_id", () => {
     beforeEach(() => helpers.seedPatterns(db, testUsers, testPatterns));
 
     context("given user doesn't exist or not authorized user", () => {
@@ -146,7 +146,7 @@ describe.only("Pattern Endpoints", function () {
     });
   });
 
-  describe("GET /api/patterns/:patternid", () => {
+  describe("GET /api/patterns/:pattern_id", () => {
     context("given pattern doesn't exist", () => {
       beforeEach(() => helpers.seedPatterns(db, testUsers, testPatterns));
       it("responds 404, pattern doesn't exist", () => {
@@ -232,7 +232,7 @@ describe.only("Pattern Endpoints", function () {
     });
   });
 
-  describe("PATCH /api/patterns/:patternid", () => {
+  describe("PATCH /api/patterns/:pattern_id", () => {
     beforeEach(() => helpers.seedPatterns(db, testUsers, testPatterns));
     it("responds 400, req body must contain fields", () => {
       return supertest(app)
@@ -247,7 +247,7 @@ describe.only("Pattern Endpoints", function () {
     it("responds 204, no content", () => {
       const updatedPattern = { title: "updated title" };
       const expectedPattern = {
-        ...testPattern[0],
+        ...testPatterns[0],
         title: "updated title",
       };
       return supertest(app)
