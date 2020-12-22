@@ -3,5 +3,5 @@ module.exports = {
   NODE_ENV: process.env.NODE_ENV || "development",
   DATABASE_URL: process.env.DATABASE_URL || "postgresql://bfart@localhost/bap",
   JWT_SECRET: process.env.JWT_SECRET || "change-this.secret",
-  CLIENT_ORIGIN: "https://bap-capstone1-bradfordbosen-rbur2vgau.vercel.app",
+  CLIENT_ORIGIN: "https://bap-capstone1-bradfordbosen-7yt8ixr6w.vercel.app/",
 };
