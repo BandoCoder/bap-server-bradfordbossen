@@ -116,9 +116,9 @@ Edit an existing pattern
 
 ##### Request Body
 
-| Type | Fields                | Description                                                                                                                                                                                            |
-| ---- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| JSON | title OR pattern_data | pattern_data should be an object containing fields for 'bpm' and/or 'notes', an array of notes where notes are represented as a pair of time and key strings inside an array, like so: ['1:0:0', 'C4'] |
+| Type | Fields                | Description                                                                                                                                                                                     |
+| ---- | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| JSON | title OR pattern_data | pattern_data should be an object containing fields for 'bpm' and 'notes', an array of notes where notes are represented as a pair of time and key strings inside an array (ex. ['1:0:0', 'C4']) |
 
 ##### Responses
 

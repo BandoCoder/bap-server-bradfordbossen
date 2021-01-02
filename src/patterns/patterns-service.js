@@ -23,6 +23,8 @@ const PatternsService = {
   updatePattern(db, id, updatedPattern) {
     return db("patterns").where({ id }).update(updatedPattern);
   },
+
+  // Protect against cross site scripting
   serializePattern(pattern) {
     return {
       id: pattern.id,
