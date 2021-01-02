@@ -1,10 +1,9 @@
-Server for BAP.
+## BAP API
 
-Stores Users and Saves patterns.
+### AUTHENTICATE USER
 
-createuser -Pw --interactive
+METHOD: POST | ENDPOINT: /api/auth/login | RETURNS: JWT
 
-createdb -U bfart bap
+#### Request Body
 
-npm run migrate
-npm run migrate:test
+TYPE: JSON | FIELDS: user_name, password | DESCRIPTION: JSON containing a username and password
