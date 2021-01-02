@@ -49,7 +49,7 @@ patternsRouter
     let db = req.app.get("db");
 
     PatternsService.removePattern(db, req.params.pattern_id)
-      .then((numRowsAffected) => {
+      .then(() => {
         res.status(204).end();
       })
       .catch(next);
@@ -69,7 +69,7 @@ patternsRouter
       });
 
     PatternsService.updatePattern(db, req.params.pattern_id, patternToUpdate)
-      .then((numRowsAffected) => {
+      .then(() => {
         res.status(204).end();
       })
       .catch(next);
